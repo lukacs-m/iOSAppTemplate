@@ -1,0 +1,28 @@
+PROJECT = "iOSAppTemplate.xcodeproj"
+DERIVED_DATA_PATH = "fastlane/tmp/DerivedData"
+UNIT_TEST_DEVICE = "iPhone 17 Pro"
+TEST_OUTPUT = "fastlane/test_output"
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+desc "Unit tests for all apps Package"
+lane :unit_test do
+    scan(
+      project: PROJECT,
+      scheme: "iOSAppTemplate",
+      testplan: "iOSAppTemplate",
+      device: UNIT_TEST_DEVICE,
+      derived_data_path: DERIVED_DATA_PATH,
+      clean: true,
+      xcargs: [
+      "-skipPackagePluginValidation",
+      "-skipMacroValidation "
+      ].join(" "),
+      output_directory: TEST_OUTPUT,
+      output_types: "junit",
+      output_files: "app-report.xml",
+    )
+end

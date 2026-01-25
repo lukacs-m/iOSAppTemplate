@@ -1,0 +1,58 @@
+{
+  "configurations" : [
+    {
+      "id" : "FDD5DB9E-8A4E-4736-B6B7-415706321E1B",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:iOSAppTemplate.xcodeproj",
+      "identifier" : "B8B05F1F2F24CAF200B06A13",
+      "name" : "iOSAppTemplate"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:LocalLibraries\/PresentationLayer",
+        "identifier" : "PresentationLayerTests",
+        "name" : "PresentationLayerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:LocalLibraries\/DomainLayer",
+        "identifier" : "DomainLayerTests",
+        "name" : "DomainLayerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:LocalLibraries\/DataLayer",
+        "identifier" : "DataLayerTests",
+        "name" : "DataLayerTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:iOSAppTemplate.xcodeproj",
+        "identifier" : "B8B05F2C2F24CAF400B06A13",
+        "name" : "iOSAppTemplateTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:LocalLibraries\/CommonLayer",
+        "identifier" : "CommonLayerTests",
+        "name" : "CommonLayerTests"
+      }
+    }
+  ],
+  "version" : 1
+}

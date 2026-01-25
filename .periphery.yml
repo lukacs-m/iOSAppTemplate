@@ -1,0 +1,14 @@
+project: iOSAppTemplate.xcodeproj
+#report_exclude:
+
+index_exclude:
+- "**/**Tests/**"
+
+
+schemes:
+- iOSAppTemplate
+
+retain_assign_only_properties: true
+skip_build: false
+strict: true
+format: xcode
