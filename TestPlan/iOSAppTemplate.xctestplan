@@ -39,7 +39,6 @@
       }
     },
     {
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:iOSAppTemplate.xcodeproj",
         "identifier" : "B8B05F2C2F24CAF400B06A13",
