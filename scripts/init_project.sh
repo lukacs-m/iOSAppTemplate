@@ -1,14 +1,15 @@
 #!/bin/bash
 
 # =============================================================================
-# iOS App Template - Project Rename Script
+# iOS App Template - Project Initialization Script
 # =============================================================================
-# This script renames the iOS App Template project to a new name and bundle ID.
-# It updates all necessary files, folders, and configurations.
+# This script initializes the iOS App Template project with a new name and bundle ID.
+# It updates all necessary files, folders, configurations, app groups, and removes
+# the template's git remote origin so you can set up your own repository.
 #
-# Usage: ./scripts/rename_project.sh <NewProjectName> <com.company.bundleid>
+# Usage: ./scripts/init_project.sh <NewProjectName> <com.company.bundleid>
 #
-# Example: ./scripts/rename_project.sh MyAwesomeApp com.mycompany.myawesomeapp
+# Example: ./scripts/init_project.sh MyAwesomeApp com.mycompany.myawesomeapp
 # =============================================================================
 
 set -e
@@ -23,6 +24,7 @@ NC='\033[0m' # No Color
 # Current template values
 OLD_PROJECT_NAME="iOSAppTemplate"
 OLD_BUNDLE_ID="com.mlukacs.iOSAppTemplate"
+OLD_APP_GROUP="group.${OLD_BUNDLE_ID}"
 
 # Print functions
 print_info() {
@@ -123,6 +125,7 @@ fi
 
 NEW_PROJECT_NAME="$1"
 NEW_BUNDLE_ID="$2"
+NEW_APP_GROUP="group.${NEW_BUNDLE_ID}"
 
 # Validate inputs
 print_info "Validating inputs..."
@@ -152,13 +155,13 @@ fi
 
 # Check if already renamed
 if [[ ! -d "$PROJECT_ROOT/$OLD_PROJECT_NAME" ]]; then
-    print_error "Project appears to have already been renamed (source folder '$OLD_PROJECT_NAME' not found)"
+    print_error "Project appears to have already been initialized (source folder '$OLD_PROJECT_NAME' not found)"
     exit 1
 fi
 
 echo ""
 echo "=============================================="
-echo "  iOS App Template - Project Rename Script"
+echo "  iOS App Template - Project Initialization"
 echo "=============================================="
 echo ""
 echo "  Current project name: $OLD_PROJECT_NAME"
@@ -167,13 +170,18 @@ echo ""
 echo "  Current bundle ID:    $OLD_BUNDLE_ID"
 echo "  New bundle ID:        $NEW_BUNDLE_ID"
 echo ""
+echo "  Current app group:    $OLD_APP_GROUP"
+echo "  New app group:        $NEW_APP_GROUP"
+echo ""
 echo "  Project root:         $PROJECT_ROOT"
+echo ""
+echo "  Git remote origin will be removed"
 echo ""
 echo "=============================================="
 echo ""
 
 # Confirmation prompt
-read -p "Do you want to proceed with the rename? (y/N) " -n 1 -r
+read -p "Do you want to proceed with the initialization? (y/N) " -n 1 -r
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     print_info "Operation cancelled"
@@ -223,6 +231,13 @@ OLD_UITESTS_BUNDLE="${OLD_BUNDLE_ID}UITests"
 NEW_UITESTS_BUNDLE="${NEW_BUNDLE_ID}UITests"
 replace_in_file "$PROJECT_ROOT/$OLD_PROJECT_NAME.xcodeproj/project.pbxproj" \
     "$OLD_UITESTS_BUNDLE" "$NEW_UITESTS_BUNDLE"
+
+# App Group identifier
+print_info "Replacing app group identifiers..."
+replace_in_file "$PROJECT_ROOT/$OLD_PROJECT_NAME.xcodeproj/project.pbxproj" \
+    "$OLD_APP_GROUP" "$NEW_APP_GROUP"
+replace_in_file "$PROJECT_ROOT/$OLD_PROJECT_NAME/$OLD_PROJECT_NAME.entitlements" \
+    "$OLD_APP_GROUP" "$NEW_APP_GROUP"
 
 # Replace project names in all relevant files
 print_info "Replacing project names..."
@@ -279,6 +294,9 @@ rename_file() {
 rename_file "$PROJECT_ROOT/$OLD_PROJECT_NAME/${OLD_PROJECT_NAME}App.swift" \
             "$PROJECT_ROOT/$OLD_PROJECT_NAME/${NEW_PROJECT_NAME}App.swift"
 
+rename_file "$PROJECT_ROOT/$OLD_PROJECT_NAME/${OLD_PROJECT_NAME}.entitlements" \
+            "$PROJECT_ROOT/$OLD_PROJECT_NAME/${NEW_PROJECT_NAME}.entitlements"
+
 rename_file "$PROJECT_ROOT/${OLD_PROJECT_NAME}Tests/${OLD_PROJECT_NAME}Tests.swift" \
             "$PROJECT_ROOT/${OLD_PROJECT_NAME}Tests/${NEW_PROJECT_NAME}Tests.swift"
 
@@ -328,6 +346,10 @@ print_step "Step 4: Updating references in renamed files..."
 replace_in_file "$PROJECT_ROOT/$NEW_PROJECT_NAME.xcodeproj/xcshareddata/xcschemes/$NEW_PROJECT_NAME.xcscheme" \
     "$OLD_PROJECT_NAME.xctestplan" "$NEW_PROJECT_NAME.xctestplan"
 
+# Update the entitlements file reference
+replace_in_file "$PROJECT_ROOT/$NEW_PROJECT_NAME.xcodeproj/project.pbxproj" \
+    "$OLD_PROJECT_NAME.entitlements" "$NEW_PROJECT_NAME.entitlements"
+
 # Make sure project.pbxproj has all references updated
 PBXPROJ="$PROJECT_ROOT/$NEW_PROJECT_NAME.xcodeproj/project.pbxproj"
 if [[ -f "$PBXPROJ" ]]; then
@@ -341,21 +363,36 @@ fi
 print_success "Reference updates complete"
 
 # -----------------------------------------------------------------------------
+# Step 5: Remove git remote origin
+# -----------------------------------------------------------------------------
+print_step "Step 5: Removing git remote origin..."
+
+cd "$PROJECT_ROOT"
+if git remote | grep -q "^origin$"; then
+    git remote remove origin
+    print_success "Git remote 'origin' removed"
+else
+    print_info "No git remote 'origin' found, skipping"
+fi
+
+# -----------------------------------------------------------------------------
 # Complete
 # -----------------------------------------------------------------------------
 echo ""
 echo "=============================================="
-echo -e "${GREEN}  Project renamed successfully!${NC}"
+echo -e "${GREEN}  Project initialized successfully!${NC}"
 echo "=============================================="
 echo ""
 echo "  New project name: $NEW_PROJECT_NAME"
 echo "  New bundle ID:    $NEW_BUNDLE_ID"
+echo "  New app group:    $NEW_APP_GROUP"
 echo ""
 echo "  Next steps:"
 echo "  1. Open $NEW_PROJECT_NAME.xcodeproj in Xcode"
 echo "  2. Clean build folder (Cmd+Shift+K)"
 echo "  3. Build the project (Cmd+B)"
 echo "  4. Update fastlane/Appfile with your Apple ID and team settings"
+echo "  5. Add your new git remote: git remote add origin <your-repo-url>"
 echo ""
 echo "=============================================="
 echo ""
