@@ -14,6 +14,10 @@ let package = Package(
             name: "DomainLayer",
             targets: ["DomainLayer"]
         ),
+        .library(
+            name: "DomainLayerProtocols",
+            targets: ["DomainLayerProtocols"]
+        ),
     ],
     dependencies: [
         .package(name: "CommonLayer", path: "../CommonLayer"),
@@ -26,7 +30,19 @@ let package = Package(
             name: "DomainLayer",
             dependencies: [
                 .product(name: "CommonLayer", package: "CommonLayer"),
-                .product(name: "DataLayer", package: "DataLayer")
+                .product(name: "DataLayer", package: "DataLayer"),
+                "DomainLayerProtocols"
+            ],
+            swiftSettings: [
+                .defaultIsolation(MainActor.self),
+                .enableUpcomingFeature("InferIsolatedConformances"),
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault")
+            ]
+        ),
+        .target(
+            name: "DomainLayerProtocols",
+            dependencies: [
+                .product(name: "CommonLayer", package: "CommonLayer"),
             ],
             swiftSettings: [
                 .defaultIsolation(MainActor.self),

@@ -17,8 +17,8 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "CommonLayer", path: "../CommonLayer"),
+        .package(name: "DomainLayer", path: "../DomainLayer"),
         .package(url: "https://github.com/lukacs-m/Logr", from: "1.0.2"),
-        .package(url: "https://github.com/hmlongco/Factory", branch: "develop"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -28,7 +28,7 @@ let package = Package(
             dependencies: [
                 .product(name: "CommonLayer", package: "CommonLayer"),
                 .product(name: "Logr", package: "Logr"),
-                .product(name: "FactoryKit", package: "Factory")
+                .product(name: "DomainLayerProtocols", package: "DomainLayer"),
             ],
             swiftSettings: [
                 .defaultIsolation(MainActor.self),

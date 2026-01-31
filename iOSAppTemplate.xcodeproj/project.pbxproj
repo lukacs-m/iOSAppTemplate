@@ -11,6 +11,7 @@
 		B8B05F522F24D78C00B06A13 /* DataLayer in Frameworks */ = {isa = PBXBuildFile; productRef = B8B05F512F24D78C00B06A13 /* DataLayer */; };
 		B8B05F542F24D78C00B06A13 /* DomainLayer in Frameworks */ = {isa = PBXBuildFile; productRef = B8B05F532F24D78C00B06A13 /* DomainLayer */; };
 		B8B05F562F24D78C00B06A13 /* PresentationLayer in Frameworks */ = {isa = PBXBuildFile; productRef = B8B05F552F24D78C00B06A13 /* PresentationLayer */; };
+		B8B05F682F2E524900B06A13 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = B8B05F672F2E524900B06A13 /* FactoryKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 			files = (
 				B8B05F522F24D78C00B06A13 /* DataLayer in Frameworks */,
 				B8B05F502F24D78C00B06A13 /* CommonLayer in Frameworks */,
+				B8B05F682F2E524900B06A13 /* FactoryKit in Frameworks */,
 				B8B05F562F24D78C00B06A13 /* PresentationLayer in Frameworks */,
 				B8B05F542F24D78C00B06A13 /* DomainLayer in Frameworks */,
 			);
@@ -133,6 +135,7 @@
 				B8B05F512F24D78C00B06A13 /* DataLayer */,
 				B8B05F532F24D78C00B06A13 /* DomainLayer */,
 				B8B05F552F24D78C00B06A13 /* PresentationLayer */,
+				B8B05F672F2E524900B06A13 /* FactoryKit */,
 			);
 			productName = iOSAppTemplate;
 			productReference = B8B05F202F24CAF200B06A13 /* iOSAppTemplate.app */;
@@ -189,6 +192,9 @@
 			);
 			mainGroup = B8B05F172F24CAF200B06A13;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B8B05F662F2E524900B06A13 /* XCRemoteSwiftPackageReference "Factory" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B8B05F212F24CAF200B06A13 /* Products */;
 			projectDirPath = "";
@@ -569,6 +575,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		B8B05F662F2E524900B06A13 /* XCRemoteSwiftPackageReference "Factory" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hmlongco/Factory";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		B8B05F4F2F24D78C00B06A13 /* CommonLayer */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -585,6 +602,11 @@
 		B8B05F552F24D78C00B06A13 /* PresentationLayer */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PresentationLayer;
+		};
+		B8B05F672F2E524900B06A13 /* FactoryKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B8B05F662F2E524900B06A13 /* XCRemoteSwiftPackageReference "Factory" */;
+			productName = FactoryKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

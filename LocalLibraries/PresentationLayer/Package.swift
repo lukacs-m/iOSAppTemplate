@@ -18,8 +18,8 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "CommonLayer", path: "../CommonLayer"),
-        .package(name: "DataLayer", path: "../DataLayer"),
-        .package(name: "DomainLayer", path: "../DomainLayer")
+        .package(name: "DomainLayer", path: "../DomainLayer"),
+        .package(url: "https://github.com/hmlongco/Factory", branch: "develop"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -28,8 +28,8 @@ let package = Package(
             name: "PresentationLayer",
             dependencies: [
                 .product(name: "CommonLayer", package: "CommonLayer"),
-                .product(name: "DataLayer", package: "DataLayer"),
-                .product(name: "DomainLayer", package: "DomainLayer")
+                .product(name: "DomainLayer", package: "DomainLayer"),
+                .product(name: "FactoryKit", package: "Factory")
             ],
             resources: [.process("Resources")],
             swiftSettings: [
