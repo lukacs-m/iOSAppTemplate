@@ -363,6 +363,24 @@ fi
 print_success "Reference updates complete"
 
 # -----------------------------------------------------------------------------
+# Step 4.1: Update Fastlane configuration
+# -----------------------------------------------------------------------------
+print_step "Step 4.1: Updating Fastlane configuration..."
+
+FASTFILE="$PROJECT_ROOT/fastlane/Fastfile"
+if [[ -f "$FASTFILE" ]]; then
+    # Update PROJECT variable (includes .xcodeproj extension)
+    replace_in_file "$FASTFILE" "${OLD_PROJECT_NAME}.xcodeproj" "${NEW_PROJECT_NAME}.xcodeproj"
+    # Update scheme name
+    replace_in_file "$FASTFILE" "scheme: \"${OLD_PROJECT_NAME}\"" "scheme: \"${NEW_PROJECT_NAME}\""
+    # Update testplan name
+    replace_in_file "$FASTFILE" "testplan: \"${OLD_PROJECT_NAME}\"" "testplan: \"${NEW_PROJECT_NAME}\""
+    print_success "Fastlane configuration updated"
+else
+    print_warning "Fastfile not found at $FASTFILE, skipping Fastlane update"
+fi
+
+# -----------------------------------------------------------------------------
 # Step 5: Remove git remote origin
 # -----------------------------------------------------------------------------
 print_step "Step 5: Removing git remote origin..."

@@ -12,13 +12,13 @@ public enum AppErrors: Error, LocalizedError {
 }
 
 public extension AppErrors {
-     var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case let .unknown(underlyingError):
             if let underlyingError {
-                return "Unknown error: \(underlyingError.localizedDescription)"
+                "Unknown error: \(underlyingError.localizedDescription)"
             } else {
-                return "An unknown error occured"
+                "An unknown error occured"
             }
         }
     }

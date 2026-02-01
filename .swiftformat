@@ -17,18 +17,17 @@
 --exponentgrouping disabled
 --fractiongrouping disabled
 #--ifdef no-indent
---importgrouping testable-top
+--import-grouping testable-top
 --operatorfunc no-space
 --nospaceoperators ..<, ...
 --selfrequired validate
 --stripunusedargs closure-only
 --wraparguments after-first
---wrapcollections after-first
 --wrapparameters after-first
 --disable wrapArguments
 --indent 4
 --maxwidth 150
---wrapcollections before-first
+--wrap-collections before-first
 --ranges no-space
 
 
@@ -40,3 +39,7 @@
 blankLineAfterImports,\
 sortSwitchCases,\
 redundantAsync,\
+noGuardInTests,\
+preferFinalClasses,\
+privateStateVariables,\
+propertytypes inferred,\
