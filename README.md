@@ -20,6 +20,7 @@
 - [Testing](#testing)
 - [Code Quality](#code-quality)
 - [CI/CD](#cicd)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -98,18 +99,18 @@ This project follows **Clean Architecture** with **MVVM** pattern, organized int
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      App Target                              │
-│                  (DI Containers, Entry Point)                │
+│                  App Target (Thin Shell)                      │
+│             (Entry Point only — no logic, no DI)             │
 └──────────────────────────┬──────────────────────────────────┘
                            │
 ┌──────────────────────────▼──────────────────────────────────┐
-│                   PresentationLayer                          │
-│              (Views, ViewModels, Navigation)                 │
+│              PresentationLayer (Main Layer)                   │
+│       (Views, ViewModels, Navigation, DI Containers)         │
 └──────────────────────────┬──────────────────────────────────┘
                            │
 ┌──────────────────────────▼──────────────────────────────────┐
 │                     DomainLayer                              │
-│               (Use Cases, Business Logic)                    │
+│        (Use Cases, StateManagers, Business Logic)            │
 └──────────────────────────┬──────────────────────────────────┘
                            │
 ┌──────────────────────────▼──────────────────────────────────┐
@@ -129,11 +130,12 @@ This project follows **Clean Architecture** with **MVVM** pattern, organized int
 |---------|-------|
 | **MVVM** | UI architecture with `@Observable` ViewModels |
 | **Repository** | Data access abstraction |
-| **Use Case** | Business logic encapsulation |
-| **Dependency Injection** | Factory containers for loose coupling |
+| **Use Case** | Stateless business logic encapsulation |
+| **StateManager** | `@Observable` live state management in DomainLayer |
+| **Dependency Injection** | Factory containers in PresentationLayer |
 | **Protocol-Oriented** | Testability through protocol abstractions |
 
-For detailed implementation guidelines, see [FEATURE_IMPLEMENTATION_GUIDE.md](FEATURE_IMPLEMENTATION_GUIDE.md).
+For detailed implementation guidelines, see the [Documentation](#documentation) section.
 
 ---
 
@@ -141,16 +143,12 @@ For detailed implementation guidelines, see [FEATURE_IMPLEMENTATION_GUIDE.md](FE
 
 ```
 [ProjectName]/
-├── [ProjectName]/                    # Main app target
+├── [ProjectName]/                    # App target (thin shell)
 │   ├── App/
-│   │   ├── DI/                       # Dependency injection containers
-│   │   │   ├── RepositoriesContainer.swift
-│   │   │   ├── ServicesContainer.swift
-│   │   │   └── ToolingContainer.swift
 │   │   └── Resources/                # App assets
-│   └── [ProjectName]App.swift        # App entry point
+│   └── [ProjectName]App.swift        # @main entry point only
 │
-├── [ProjectName]Tests/               # Main app tests
+├── [ProjectName]Tests/               # App integration tests
 │
 ├── LocalLibraries/                   # Swift packages
 │   ├── CommonLayer/                  # Shared utilities
@@ -167,23 +165,26 @@ For detailed implementation guidelines, see [FEATURE_IMPLEMENTATION_GUIDE.md](FE
 │   │   │       └── Network/          # API clients
 │   │   └── Tests/
 │   │
-│   ├── DomainLayer/                  # Business logic
+│   ├── DomainLayer/                  # Business logic & state
 │   │   ├── Sources/
 │   │   │   ├── DomainLayer/
-│   │   │   │   └── UseCases/         # Use case implementations
+│   │   │   │   ├── UseCases/         # Stateless business operations
+│   │   │   │   └── StateManagers/    # @Observable live state objects
 │   │   │   └── DomainLayerProtocols/
 │   │   │       └── Protocols/        # Repository protocols
 │   │   └── Tests/
 │   │
-│   └── PresentationLayer/            # UI layer
+│   └── PresentationLayer/            # Main orchestrating layer
 │       ├── Sources/
 │       │   └── PresentationLayer/
-│       │       ├── Pages/            # Feature screens
+│       │       ├── DI/               # Dependency injection containers
+│       │       ├── Pages/            # Feature screens (View + ViewModel)
 │       │       ├── Routing/          # Navigation
 │       │       ├── Shared/           # Reusable components
 │       │       └── Resources/        # UI assets
 │       └── Tests/
 │
+├── docs/                             # Project documentation
 ├── TestPlan/                         # Xcode test plans
 ├── scripts/                          # Build scripts
 ├── fastlane/                         # CI/CD configuration
@@ -350,6 +351,16 @@ Authorization: Bearer <token>
 
 ---
 
+## Documentation
+
+Detailed guides and references are available in the [`docs/`](docs/) folder:
+
+| Document | Description |
+|----------|-------------|
+| [Feature Implementation Guide](docs/FEATURE_IMPLEMENTATION_GUIDE.md) | Step-by-step guide for implementing new features across all layers, including architecture overview, StateManager pattern, search implementation, DI registration, and testing |
+
+---
+
 ## Contributing
 
 ### Getting Started
@@ -364,7 +375,7 @@ Authorization: Bearer <token>
 
 ### Code Standards
 
-- Follow [FEATURE_IMPLEMENTATION_GUIDE.md](FEATURE_IMPLEMENTATION_GUIDE.md)
+- Follow the [Feature Implementation Guide](docs/FEATURE_IMPLEMENTATION_GUIDE.md)
 - Ensure all tests pass
 - Maintain code coverage
 - Follow SwiftLint rules
